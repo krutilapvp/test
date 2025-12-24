@@ -1,8 +1,9 @@
+from typing import Generator
+
 import pytest
 from flask import Flask
 from flask.testing import FlaskClient
 from sqlalchemy.orm import scoped_session
-from typing import Generator
 
 from app import create_app
 from models import db
