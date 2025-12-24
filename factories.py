@@ -25,4 +25,4 @@ class ParkingFactory(factory.alchemy.SQLAlchemyModelFactory):
     address = factory.Faker("address")
     opened = fuzzy.FuzzyChoice([True, False])
     count_places = fuzzy.FuzzyInteger(5, 50)
-    count_available_places = factory.SelfAttribute('count_places')
+    count_available_places = factory.SelfAttribute("count_places")
