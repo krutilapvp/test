@@ -12,7 +12,8 @@ class ClientFactory(factory.alchemy.SQLAlchemyModelFactory):
 
     name = factory.Faker("first_name")
     surname = factory.Faker("last_name")
-    credit_card = fuzzy.FuzzyChoice([None, factory.Faker("credit_card_number")])
+    credit_card = fuzzy.FuzzyChoice(
+        [None, factory.Faker("credit_card_number")])
     car_number = factory.Faker("license_plate")
 
 
