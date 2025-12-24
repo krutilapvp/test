@@ -37,7 +37,5 @@ class ClientParking(db.Model):
     parking = db.relationship("Parking", back_populates="logs")
 
     __table_args__ = (
-        db.UniqueConstraint(
-            "client_id", "parking_id", name="unique_client_parking"
-        ),
+        db.UniqueConstraint("client_id", "parking_id", name="unique_client_parking"),
     )
