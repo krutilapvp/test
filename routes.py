@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Any, Dict, List, Union
+from typing import Dict, List, Union
 
 from flask import Blueprint, jsonify, request
 
