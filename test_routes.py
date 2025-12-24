@@ -1,6 +1,9 @@
 from datetime import datetime
+from typing import Any, Dict
 
 import pytest
+from flask.testing import FlaskClient
+from sqlalchemy.orm import Session
 
 from models import Client, ClientParking, Parking
 
@@ -8,13 +11,13 @@ from models import Client, ClientParking, Parking
 @pytest.mark.parametrize(
     "endpoint, expected_status", [("/api/clients", 200), ("/api/parkings", 405)]
 )
-def test_get_endpoints(client, endpoint, expected_status):
+def test_get_endpoints(client: FlaskClient, endpoint: str, expected_status: int) -> None:
     response = client.get(endpoint)
     assert response.status_code == expected_status
 
 
-def test_create_client(client, db_session):
-    client_data = {
+def test_create_client(client: FlaskClient, db_session: Session) -> None:
+    client_data: Dict[str, Any] = {
         "name": "TestName",
         "surname": "TestSurname",
         "credit_card": "4111111111111111",
@@ -34,8 +37,12 @@ def test_create_client(client, db_session):
     db_session.commit()
 
 
-def test_create_parking(client, db_session):
-    parking_data = {"address": "Test Address 123", "opened": True, "count_places": 20}
+def test_create_parking(client: FlaskClient, db_session: Session) -> None:
+    parking_data: Dict[str, Any] = {
+        "address": "Test Address 123", 
+        "opened": True, 
+        "count_places": 20
+    }
 
     parkings_count_before = Parking.query.count()
 
@@ -51,7 +58,7 @@ def test_create_parking(client, db_session):
 
 
 @pytest.mark.parking
-def test_client_parking_in(client, db_session):
+def test_client_parking_in(client: FlaskClient, db_session: Session) -> None:
     new_client = Client(
         name="Test",
         surname="Client",
@@ -66,7 +73,10 @@ def test_client_parking_in(client, db_session):
     db_session.add(new_parking)
     db_session.commit()
 
-    parking_data = {"client_id": new_client.id, "parking_id": new_parking.id}
+    parking_data: Dict[str, Any] = {
+        "client_id": new_client.id, 
+        "parking_id": new_parking.id
+    }
 
     available_places_before = new_parking.count_available_places
 
@@ -80,7 +90,7 @@ def test_client_parking_in(client, db_session):
 
 
 @pytest.mark.parking
-def test_client_parking_out(client, db_session):
+def test_client_parking_out(client: FlaskClient, db_session: Session) -> None:
     exit_client = Client(
         name="Exit",
         surname="Client",
@@ -106,7 +116,10 @@ def test_client_parking_out(client, db_session):
 
     available_places_before = exit_parking.count_available_places
 
-    checkin_data = {"client_id": exit_client.id, "parking_id": exit_parking.id}
+    checkin_data: Dict[str, Any] = {
+        "client_id": exit_client.id, 
+        "parking_id": exit_parking.id
+    }
 
     response = client.delete("/api/client_parkings", json=checkin_data)
 
@@ -118,7 +131,7 @@ def test_client_parking_out(client, db_session):
 
 
 @pytest.mark.parking
-def test_parking_closed(client, db_session):
+def test_parking_closed(client: FlaskClient, db_session: Session) -> None:
     closed_client = Client(
         name="Closed",
         surname="Client",
@@ -133,7 +146,10 @@ def test_parking_closed(client, db_session):
     db_session.add(closed_parking)
     db_session.commit()
 
-    parking_data = {"client_id": closed_client.id, "parking_id": closed_parking.id}
+    parking_data: Dict[str, Any] = {
+        "client_id": closed_client.id, 
+        "parking_id": closed_parking.id
+    }
 
     response = client.post("/api/client_parkings", json=parking_data)
 
@@ -142,7 +158,7 @@ def test_parking_closed(client, db_session):
 
 
 @pytest.mark.parking
-def test_client_without_credit_card(client, db_session):
+def test_client_without_credit_card(client: FlaskClient, db_session: Session) -> None:
     no_card_client = Client(
         name="NoCard", surname="Client", credit_card=None, car_number="D012GH"
     )
@@ -162,7 +178,10 @@ def test_client_without_credit_card(client, db_session):
     parking.count_available_places -= 1
     db_session.commit()
 
-    checkin_data = {"client_id": no_card_client.id, "parking_id": parking.id}
+    checkin_data: Dict[str, Any] = {
+        "client_id": no_card_client.id, 
+        "parking_id": parking.id
+    }
 
     response = client.delete("/api/client_parkings", json=checkin_data)
 
