@@ -28,8 +28,4 @@ class ParkingFactory(factory.alchemy.SQLAlchemyModelFactory):
 
     @factory.lazy_attribute
     def count_available_places(self) -> int:
-        return (
-            self.count_places
-            if isinstance(self.count_places, int)
-            else self.count_places.evaluate()
-        )
+        return self.count_places
