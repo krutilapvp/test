@@ -11,7 +11,9 @@ from models import Client, ClientParking, Parking
 @pytest.mark.parametrize(
     "endpoint, expected_status", [("/api/clients", 200), ("/api/parkings", 405)]
 )
-def test_get_endpoints(client: FlaskClient, endpoint: str, expected_status: int) -> None:
+def test_get_endpoints(
+    client: FlaskClient, endpoint: str, expected_status: int
+) -> None:
     response = client.get(endpoint)
     assert response.status_code == expected_status
 
