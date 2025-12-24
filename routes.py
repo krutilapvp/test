@@ -77,7 +77,8 @@ def create_parking():
     )
     db.session.add(new_parking)
     db.session.commit()
-    return jsonify({"message": "Parking zone created", "id": new_parking.id}), 201
+    return jsonify({
+        "message": "Parking zone created", "id": new_parking.id}), 201
 
 
 @bp.route("/client_parkings", methods=["POST"])
