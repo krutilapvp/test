@@ -27,5 +27,5 @@ class ParkingFactory(factory.alchemy.SQLAlchemyModelFactory):
     count_places = fuzzy.FuzzyInteger(5, 50)
 
     @factory.lazy_attribute
-    def count_available_places(self):
+    def count_available_places(self) -> int:
         return self.count_places
