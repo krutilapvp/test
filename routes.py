@@ -2,7 +2,6 @@ from datetime import datetime
 from typing import Any, Dict, List, Optional
 
 from flask import Blueprint, Response, jsonify, request
-from sqlalchemy.orm import Session
 
 from models import Client, ClientParking, Parking, db
 
