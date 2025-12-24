@@ -1,5 +1,7 @@
 from datetime import datetime
 
+from typing import List, Dict, Any, Union
+
 from flask import Blueprint, jsonify, request
 
 from models import Client, ClientParking, Parking, db
@@ -8,7 +10,7 @@ bp = Blueprint("api", __name__)
 
 
 @bp.route("/clients", methods=["GET"])
-def get_clients():
+def get_clients() -> List[Dict[str, Union[int, str, None]]]:
     clients = Client.query.all()
     result = []
     for c in clients:
@@ -25,7 +27,7 @@ def get_clients():
 
 
 @bp.route("/clients/<int:client_id>", methods=["GET"])
-def get_client(client_id):
+def get_client(client_id) -> List[Dict[str, Union[int, str, None]]]:
     client = Client.query.get_or_404(client_id)
     return (
         jsonify(
@@ -42,7 +44,7 @@ def get_client(client_id):
 
 
 @bp.route("/clients", methods=["POST"])
-def create_client():
+def create_client() -> List[Dict[str, Union[int, str, None]]]:
     data = request.get_json()
     name = data.get("name")
     surname = data.get("surname")
@@ -59,7 +61,7 @@ def create_client():
 
 
 @bp.route("/parkings", methods=["POST"])
-def create_parking():
+def create_parking() -> List[Dict[str, Union[int, str, None]]]:
     data = request.get_json()
     address = data.get("address")
     opened = data.get("opened", True)
@@ -78,7 +80,7 @@ def create_parking():
 
 
 @bp.route("/client_parkings", methods=["POST"])
-def client_parking_in():
+def client_parking_in() -> List[Dict[str, Union[int, str, None]]]:
     data = request.get_json()
     client_id = data.get("client_id")
     parking_id = data.get("parking_id")
@@ -112,7 +114,7 @@ def client_parking_in():
 
 
 @bp.route("/client_parkings", methods=["DELETE"])
-def client_parking_out():
+def client_parking_out() -> List[Dict[str, Union[int, str, None]]]:
     data = request.get_json()
     client_id = data.get("client_id")
     parking_id = data.get("parking_id")
