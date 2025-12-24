@@ -51,10 +51,7 @@ def create_client():
     if not name or not surname:
         return jsonify({"error": "Missing required fields"}), 400
     new_client = Client(
-        name=name, 
-        surname=surname, 
-        credit_card=credit_card, 
-        car_number=car_number
+        name=name, surname=surname, credit_card=credit_card, car_number=car_number
     )
     db.session.add(new_client)
     db.session.commit()
@@ -77,9 +74,7 @@ def create_parking():
     )
     db.session.add(new_parking)
     db.session.commit()
-    return jsonify({"message": "Parking zone created", 
-                    "id": new_parking.id}
-                  ), 201
+    return jsonify({"message": "Parking zone created", "id": new_parking.id}), 201
 
 
 @bp.route("/client_parkings", methods=["POST"])

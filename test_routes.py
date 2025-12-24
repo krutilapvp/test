@@ -6,10 +6,7 @@ from models import Client, ClientParking, Parking
 
 
 @pytest.mark.parametrize(
-    "endpoint, expected_status", [
-        ("/api/clients", 200), 
-        ("/api/parkings", 405)
-    ]
+    "endpoint, expected_status", [("/api/clients", 200), ("/api/parkings", 405)]
 )
 def test_get_endpoints(client, endpoint, expected_status):
     response = client.get(endpoint)
@@ -38,10 +35,7 @@ def test_create_client(client, db_session):
 
 
 def test_create_parking(client, db_session):
-    parking_data = {"address": "Test Address 123", 
-                    "opened": True, 
-                    "count_places": 20
-                   }
+    parking_data = {"address": "Test Address 123", "opened": True, "count_places": 20}
 
     parkings_count_before = Parking.query.count()
 
@@ -67,23 +61,16 @@ def test_client_parking_in(client, db_session):
     db_session.add(new_client)
 
     new_parking = Parking(
-        address="Test Parking", 
-        opened=True, 
-        count_places=10, 
-        count_available_places=10
+        address="Test Parking", opened=True, count_places=10, count_available_places=10
     )
     db_session.add(new_parking)
     db_session.commit()
 
-    parking_data = {"client_id": new_client.id, 
-                    "parking_id": new_parking.id
-                   }
+    parking_data = {"client_id": new_client.id, "parking_id": new_parking.id}
 
     available_places_before = new_parking.count_available_places
 
-    response = client.post("/api/client_parkings", 
-                           json=parking_data
-                          )
+    response = client.post("/api/client_parkings", json=parking_data)
 
     assert response.status_code == 200
     assert response.json["message"] == "Car checked in"
@@ -103,18 +90,13 @@ def test_client_parking_out(client, db_session):
     db_session.add(exit_client)
 
     exit_parking = Parking(
-        address="Exit Parking", 
-        opened=True, 
-        count_places=15, 
-        count_available_places=15
+        address="Exit Parking", opened=True, count_places=15, count_available_places=15
     )
     db_session.add(exit_parking)
     db_session.commit()
 
     parking_log = ClientParking(
-        client_id=exit_client.id, 
-        parking_id=exit_parking.id, 
-        time_in=datetime.now()
+        client_id=exit_client.id, parking_id=exit_parking.id, time_in=datetime.now()
     )
     db_session.add(parking_log)
     db_session.commit()
@@ -124,9 +106,7 @@ def test_client_parking_out(client, db_session):
 
     available_places_before = exit_parking.count_available_places
 
-    checkin_data = {"client_id": exit_client.id, 
-                    "parking_id": exit_parking.id
-                   }
+    checkin_data = {"client_id": exit_client.id, "parking_id": exit_parking.id}
 
     response = client.delete("/api/client_parkings", json=checkin_data)
 
@@ -148,16 +128,12 @@ def test_parking_closed(client, db_session):
     db_session.add(closed_client)
 
     closed_parking = Parking(
-        address="Closed Parking", 
-        opened=False, 
-        count_places=5, 
-        count_available_places=5
+        address="Closed Parking", opened=False, count_places=5, count_available_places=5
     )
     db_session.add(closed_parking)
     db_session.commit()
 
-    parking_data = {"client_id": closed_client.id, 
-                    "parking_id": closed_parking.id}
+    parking_data = {"client_id": closed_client.id, "parking_id": closed_parking.id}
 
     response = client.post("/api/client_parkings", json=parking_data)
 
@@ -168,35 +144,25 @@ def test_parking_closed(client, db_session):
 @pytest.mark.parking
 def test_client_without_credit_card(client, db_session):
     no_card_client = Client(
-        name="NoCard", 
-        surname="Client", 
-        credit_card=None, 
-        car_number="D012GH"
+        name="NoCard", surname="Client", credit_card=None, car_number="D012GH"
     )
     db_session.add(no_card_client)
 
     parking = Parking(
-        address="Test Parking", 
-        opened=True, 
-        count_places=8, 
-        count_available_places=8
+        address="Test Parking", opened=True, count_places=8, count_available_places=8
     )
     db_session.add(parking)
     db_session.commit()
 
     parking_log = ClientParking(
-        client_id=no_card_client.id, 
-        parking_id=parking.id, 
-        time_in=datetime.now()
+        client_id=no_card_client.id, parking_id=parking.id, time_in=datetime.now()
     )
     db_session.add(parking_log)
 
     parking.count_available_places -= 1
     db_session.commit()
 
-    checkin_data = {"client_id": no_card_client.id, 
-                    "parking_id": parking.id
-                   }
+    checkin_data = {"client_id": no_card_client.id, "parking_id": parking.id}
 
     response = client.delete("/api/client_parkings", json=checkin_data)
 
