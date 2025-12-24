@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
 
-class Client(db.Model): # type: ignore
+class Client(db.Model):  # type: ignore
     __tablename__ = "client"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False)
@@ -14,7 +14,7 @@ class Client(db.Model): # type: ignore
     park_logs = db.relationship("ClientParking", back_populates="client")
 
 
-class Parking(db.Model): # type: ignore
+class Parking(db.Model):  # type: ignore
     __tablename__ = "parking"
     id = db.Column(db.Integer, primary_key=True)
     address = db.Column(db.String(100), nullable=False)
@@ -25,7 +25,7 @@ class Parking(db.Model): # type: ignore
     logs = db.relationship("ClientParking", back_populates="parking")
 
 
-class ClientParking(db.Model): # type: ignore
+class ClientParking(db.Model):  # type: ignore
     __tablename__ = "client_parking"
     id = db.Column(db.Integer, primary_key=True)
     client_id = db.Column(db.Integer, db.ForeignKey("client.id"))
