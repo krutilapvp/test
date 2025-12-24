@@ -51,7 +51,10 @@ def create_client():
     if not name or not surname:
         return jsonify({"error": "Missing required fields"}), 400
     new_client = Client(
-        name=name, surname=surname, credit_card=credit_card, car_number=car_number
+        name=name, 
+        surname=surname, 
+        credit_card=credit_card, 
+        car_number=car_number
     )
     db.session.add(new_client)
     db.session.commit()
