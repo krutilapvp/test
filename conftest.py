@@ -1,8 +1,7 @@
 import pytest
 
 from app import create_app
-from factories import ClientFactory, ParkingFactory
-from models import Client, ClientParking, Parking, db
+from models import db
 
 
 def pytest_configure(config):
