@@ -1,10 +1,10 @@
-from typing import List, Dict, Any, Union
-
 from datetime import datetime
+from typing import Any, Dict, List, Union
 
 from flask import Blueprint, jsonify, request
 
 from models import Client, ClientParking, Parking, db
+
 
 bp = Blueprint("api", __name__)
 
