@@ -119,7 +119,9 @@ def client_parking_in() -> tuple[Response, int]:
     if parking.count_available_places <= 0:
         return jsonify({"error": "No available places"}), 400
 
-    new_log = ClientParking(client_id=client_id, parking_id=parking_id, time_in=datetime.now())
+    new_log = ClientParking(
+        client_id=client_id, parking_id=parking_id, time_in=datetime.now()
+    )
     db.session.add(new_log)
 
     parking.count_available_places -= 1
