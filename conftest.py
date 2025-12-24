@@ -1,10 +1,13 @@
 import pytest
+from flask import Flask
+from flask.testing import FlaskClient
+from sqlalchemy.orm import Session
 
 from app import create_app
 from models import db
 
 
-def pytest_configure(config):
+def pytest_configure(config: pytest.Config) -> None:
     config.addinivalue_line("markers", "parking: маркер для тестов парковки")
 
 
