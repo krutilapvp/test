@@ -2,6 +2,7 @@ import pytest
 from flask import Flask
 from flask.testing import FlaskClient
 from sqlalchemy.orm import scoped_session
+from typing import Generator
 
 from app import create_app
 from models import db
@@ -12,7 +13,7 @@ def pytest_configure(config: pytest.Config) -> None:
 
 
 @pytest.fixture(scope="function")
-def app() -> Flask:
+def app() -> Generator[Flask, None, None]:
     app = create_app()
     app.config.update(
         {
@@ -35,6 +36,6 @@ def client(app: Flask) -> FlaskClient:
 
 
 @pytest.fixture(scope="function")
-def db_session(app: Flask) -> scoped_session:
+def db_session(app: Flask) -> Generator[scoped_session, None, None]:
     with app.app_context():
         yield db.session
