@@ -11,9 +11,7 @@ from models import Client, ClientParking, Parking
 @pytest.mark.parametrize(
     "endpoint, expected_status", [("/api/clients", 200), ("/api/parkings", 405)]
 )
-def test_get_endpoints(
-    client: FlaskClient, endpoint: str, expected_status: int
-) -> None:
+def test_get_endpoints(client: FlaskClient, endpoint: str, expected_status: int) -> None:
     response = client.get(endpoint)
     assert response.status_code == expected_status
 
@@ -31,6 +29,7 @@ def test_create_client(client: FlaskClient, db_session: Session) -> None:
     response = client.post("/api/clients", json=client_data)
 
     assert response.status_code == 201
+    assert response.json is not None
     assert response.json["message"] == "Client created"
 
     clients_count_after = Client.query.count()
@@ -51,6 +50,7 @@ def test_create_parking(client: FlaskClient, db_session: Session) -> None:
     response = client.post("/api/parkings", json=parking_data)
 
     assert response.status_code == 201
+    assert response.json is not None
     assert response.json["message"] == "Parking zone created"
 
     parkings_count_after = Parking.query.count()
@@ -85,6 +85,7 @@ def test_client_parking_in(client: FlaskClient, db_session: Session) -> None:
     response = client.post("/api/client_parkings", json=parking_data)
 
     assert response.status_code == 200
+    assert response.json is not None
     assert response.json["message"] == "Car checked in"
 
     db_session.refresh(new_parking)
@@ -126,6 +127,7 @@ def test_client_parking_out(client: FlaskClient, db_session: Session) -> None:
     response = client.delete("/api/client_parkings", json=checkin_data)
 
     assert response.status_code == 200
+    assert response.json is not None
     assert response.json["message"] == "Car checked out"
 
     db_session.refresh(exit_parking)
@@ -156,6 +158,7 @@ def test_parking_closed(client: FlaskClient, db_session: Session) -> None:
     response = client.post("/api/client_parkings", json=parking_data)
 
     assert response.status_code == 400
+    assert response.json is not None
     assert response.json["error"] == "Parking is closed"
 
 
@@ -188,4 +191,5 @@ def test_client_without_credit_card(client: FlaskClient, db_session: Session) ->
     response = client.delete("/api/client_parkings", json=checkin_data)
 
     assert response.status_code == 400
+    assert response.json is not None
     assert response.json["error"] == "Client has no credit card attached"
