@@ -9,7 +9,7 @@ def pytest_configure(config: pytest.Config) -> None:
 
 
 @pytest.fixture(scope="function")
-def app():
+def app() -> Flask:
     app = create_app()
     app.config.update(
         {
@@ -27,11 +27,11 @@ def app():
 
 
 @pytest.fixture(scope="function")
-def client(app):
+def client(app: Flask) -> FlaskClient:
     return app.test_client()
 
 
 @pytest.fixture(scope="function")
-def db_session(app):
+def db_session(app: Flask) -> scoped_session:
     with app.app_context():
         yield db.session
